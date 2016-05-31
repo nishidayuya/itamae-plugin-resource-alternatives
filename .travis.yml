@@ -1,0 +1,17 @@
+sudo: required
+
+language: ruby
+
+rvm:
+  - ruby-head
+  - 2.2
+  - 2.1
+
+services:
+  - docker
+
+before_install:
+  - gem update bundler
+
+script:
+  - bundle exec rake
