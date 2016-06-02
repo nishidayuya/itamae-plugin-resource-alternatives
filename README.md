@@ -2,6 +2,8 @@
 
 Itamae resource plugin to manage "update-alternatives".
 
+[![License X11](https://img.shields.io/badge/license-X11-brightgreen.svg)](https://raw.githubusercontent.com/nishidayuya/itamae-plugin-resource-alternatives/master/LICENSE.txt)
+
 ## Installation
 
 Add this line to your application's Gemfile:
