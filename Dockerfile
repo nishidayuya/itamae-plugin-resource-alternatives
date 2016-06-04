@@ -11,4 +11,5 @@ RUN mkdir -p /root/.ssh && \
     https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub
 RUN rm -fv /usr/sbin/policy-rc.d
 
+EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]

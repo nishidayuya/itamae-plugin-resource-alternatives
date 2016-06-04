@@ -1,7 +1,7 @@
 Host test-server
   HostName localhost
   User root
-  Port 10022
+  Port %{port}
   StrictHostKeyChecking no
   PasswordAuthentication no
   IdentityFile spec/test_server_key

@@ -1,5 +1,6 @@
 require "pathname"
 require "open-uri"
+require "open3"
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 
@@ -12,6 +13,20 @@ def run(*cmd)
   end
 end
 
+def run_and_stdout(*cmd)
+  stdout, status = *Open3.capture2(*cmd)
+  if !status.success?
+    raise "run failure: #{cmd.inspect}"
+  end
+  return stdout
+end
+
+def container_port(container_name)
+  return run_and_stdout(*%W"docker inspect",
+                        "--format={{range $p, $conf := .NetworkSettings.Ports}}{{(index $conf 0).HostPort}}{{end}}",
+                        container_name)
+end
+
 namespace :spec do
   desc "Run provision"
   task :provision do
@@ -22,14 +37,23 @@ namespace :spec do
 
     run("docker build -t test-server .")
 
-    if `docker ps --all --no-trunc`.each_line.grep(/ test-server$/).length > 0
-      run("docker rm --force test-server")
+    path = Pathname("spec/.last_ran_container")
+    if path.exist?
+      run(*%W"docker rm -f", path.read.chomp)
     end
 
-    # port 22 is already used by TravisCI.
-    run("docker run --name=test-server --detach --publish=10022:22 test-server")
-
-    run("bundle exec itamae ssh --log-level=debug --ssh-config spec/ssh_config --host=test-server spec/recipe.rb")
+    container_name = "test-server-#{Time.now.strftime('%Y%m%d-%H%M%S')}"
+    path.write(container_name)
+    run(*%W"docker run --name=#{container_name} --detach --publish-all
+              test-server")
+    port = container_port(container_name)
+    File.write("spec/ssh_config",
+               File.read("spec/ssh_config.in") % {port: port})
+    run(*%W"bundle exec itamae ssh --log-level=debug
+              --ssh-config spec/ssh_config
+              --host=test-server
+              --port=#{port}
+              spec/recipe.rb")
   end
 
   desc "Run serverspec"
