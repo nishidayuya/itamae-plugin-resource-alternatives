@@ -10,8 +10,13 @@ rvm:
 services:
   - docker
 
+env:
+  - VAGRANT_VERSION=1.8.4
+
 before_install:
   - gem update bundler
+  - wget https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb
+  - sudo dpkg -i vagrant_${VAGRANT_VERSION}_x86_64.deb
 
 script:
   - bundle exec rake

@@ -1,8 +1,0 @@
-Host test-server
-  HostName localhost
-  User root
-  Port %{port}
-  StrictHostKeyChecking no
-  PasswordAuthentication no
-  IdentityFile spec/test_server_key
-  IdentitiesOnly yes

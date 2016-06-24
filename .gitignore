@@ -1,4 +1,5 @@
 /.bundle/
+/.vagrant
 /.yardoc
 /Gemfile.lock
 /_yardoc/
@@ -7,6 +8,3 @@
 /pkg/
 /spec/reports/
 /tmp/
-/spec/.last_ran_container
-/spec/ssh_config
-/spec/test_server_key
