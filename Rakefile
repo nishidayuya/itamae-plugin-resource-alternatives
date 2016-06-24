@@ -3,9 +3,6 @@ require "open3"
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 
-task spec: %i[spec:provision spec:serverspec]
-task default: %i[spec build]
-
 def run(*args)
   if !system(*args)
     raise "failure: #{args.inspect}"
@@ -23,6 +20,9 @@ end
 targets = Bundler.with_clean_env {
   `vagrant status`[/(?<=\n\n).*?(?=\n\n)/m].gsub(/ .*/, "").split("\n")
 }
+
+task spec: %i[spec:provision spec:serverspec]
+task default: %i[spec build]
 
 namespace :spec do
   desc "Run Itamae to all"
