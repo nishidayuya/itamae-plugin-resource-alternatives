@@ -18,35 +18,32 @@ def capture(*args)
 end
 
 targets = Bundler.with_clean_env {
-  `vagrant status`[/(?<=\n\n).*?(?=\n\n)/m].gsub(/ .*/, "").split("\n")
+  capture("vagrant status")[/(?<=\n\n).*?(?=\n\n)/m].gsub(/ .*/, "").split("\n")
 }
 
-task spec: %i[spec:provision spec:serverspec]
+desc "Run Itamae and Serverspec to all"
+task spec: targets.map { |target| "spec:#{target}" }
 task default: %i[spec build]
 
 namespace :spec do
-  desc "Run Itamae to all"
-  task provision: targets.map { |target| "spec:provision:#{target}" }
+  targets.each do |target|
+    desc "Run Itamae and Serverspec to #{target}"
+    task target.to_sym => [
+      "spec:#{target}:provision",
+      "spec:#{target}:serverspec",
+    ]
 
-  namespace :provision do
-    targets.each do |target|
+    namespace target.to_sym do
       desc "Run Itamae to #{target}"
-      task target.to_sym do
+      task :provision do
         Bundler.with_clean_env do
           run("vagrant up #{target}")
         end
         run("itamae ssh --vagrant --host #{target} spec/recipe.rb")
       end
-    end
-  end
 
-  desc "Run Serverspec to all"
-  task serverspec: targets.map { |target| "spec:serverspec:#{target}" }
-
-  namespace :serverspec do
-    targets.each do |target|
       desc "Run Serverspec to #{target}"
-      RSpec::Core::RakeTask.new(target.to_sym) do |t|
+      RSpec::Core::RakeTask.new(:serverspec) do |t|
         ENV["TARGET_HOST"] = target
         t.pattern = "spec/*_spec.rb"
       end
