@@ -1,8 +1,9 @@
 require "rake"
+require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 
 task spec: %i[spec:provision spec:serverspec]
-task default: :spec
+task default: %i[spec build]
 
 def run(*args)
   if !system(*args)
