@@ -1,3 +1,8 @@
+if ENV["CODECLIMATE_REPO_TOKEN"]
+  require "codeclimate-test-reporter"
+  CodeClimate::TestReporter.start
+end
+
 # Manual
 
 %w(nano vim-tiny).each do |name|
