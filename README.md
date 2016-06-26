@@ -4,6 +4,7 @@ Itamae resource plugin to manage "update-alternatives".
 
 [![License X11](https://img.shields.io/badge/license-X11-brightgreen.svg)](https://raw.githubusercontent.com/nishidayuya/itamae-plugin-resource-alternatives/master/LICENSE.txt)
 [![Build Status](https://img.shields.io/travis/nishidayuya/itamae-plugin-resource-alternatives.svg)](https://travis-ci.org/nishidayuya/itamae-plugin-resource-alternatives)
+[![Code Climate](https://img.shields.io/codeclimate/github/nishidayuya/itamae-plugin-resource-alternatives.svg)](https://codeclimate.com/github/nishidayuya/itamae-plugin-resource-alternatives)
 
 ## Installation
 
