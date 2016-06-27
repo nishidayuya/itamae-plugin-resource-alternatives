@@ -20,7 +20,7 @@ class Itamae::Plugin::Resource::Alternatives < Itamae::Resource::Base
     parse_query(q)
   end
 
-  def action_create(options)
+  def action_create(_options)
     if attributes.auto
       if !current.auto
         run_command(["update-alternatives", "--auto", attributes.name])
