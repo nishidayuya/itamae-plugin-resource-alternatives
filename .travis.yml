@@ -12,7 +12,11 @@ services:
   - docker
 
 env:
-  - VAGRANT_VERSION=1.8.4
+  global:
+    - VAGRANT_VERSION=1.8.4
+  matrix:
+    - TARGET=debian
+    - TARGET=ubuntu
 
 before_install:
   - gem update bundler
@@ -20,4 +24,5 @@ before_install:
   - sudo dpkg -i vagrant_${VAGRANT_VERSION}_x86_64.deb
 
 script:
-  - bundle exec rake
+  - bundle exec rake spec:${TARGET}
+  - bundle exec rake build
